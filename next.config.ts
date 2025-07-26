@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
       {
         hostname: 'cdn.10minuteschool.com',
       },
+      {
+        hostname: 'dummyimage.com',
+      },
     ],
   },
 };
