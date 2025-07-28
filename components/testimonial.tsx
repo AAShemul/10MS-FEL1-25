@@ -1,12 +1,12 @@
 'use client'
 
-import type { Testimonial } from '@/types/interface'
+import type { Section, Testimonial } from '@/types/interface'
 import useEmblaCarousel from 'embla-carousel-react'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
-import { FaChevronLeft, FaChevronRight, FaRegStar, FaStar } from 'react-icons/fa'
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
-export default function TestimonialCarousel({ testimonials, title }: { testimonials: Testimonial[]; title: string }) {
+export default function TestimonialCarousel({ data }: { data: Section }) {
 	const [emblaRef, emblaApi] = useEmblaCarousel({
 		loop: true,
 		align: 'start',
@@ -46,7 +46,7 @@ export default function TestimonialCarousel({ testimonials, title }: { testimoni
 	return (
 		<section className="mb-12">
 			<div className="flex justify-between items-center mb-6">
-				<h2 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h2>
+				<h2 className="text-2xl font-bold text-gray-900 dark:text-white">{data.name}</h2>
 				<div className="flex space-x-2">
 					<button
 						onClick={scrollPrev}
@@ -67,16 +67,16 @@ export default function TestimonialCarousel({ testimonials, title }: { testimoni
 
 			<div className="relative">
 				<div
-					className="overflow-hidden"
+					className="overflow-x-hidden"
 					ref={emblaRef}
 				>
 					<div className="flex -mx-3">
-						{testimonials?.map((testimonial, idx) => (
+						{(data?.values as Testimonial[])?.map((testimonial: Testimonial) => (
 							<div
-								key={idx}
-								className="flex-[0_0_calc(100%-1.5rem)] sm:flex-[0_0_calc(50%-1.5rem)] lg:flex-[0_0_calc(40%-1.5rem)] px-3"
+								key={testimonial.id}
+								className="flex-[0_0_calc(100%-1.5rem)] md:flex-[0_0_calc(90%-1.5rem)] lg:flex-[0_0_calc(80%-1.5rem)] my-4 px-3"
 							>
-								<div className="h-full bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+								<div className="h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
 									<div className="flex items-center space-x-4 mb-4">
 										<div className="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
 											<Image
@@ -96,24 +96,14 @@ export default function TestimonialCarousel({ testimonials, title }: { testimoni
 											</p>
 										</div>
 									</div>
-									<div className="flex items-center text-yellow-400 mb-2">
-										{[...Array(5)].map((_, i) =>
-											i < Math.floor(testimonial.rating || 5) ? (
-												<FaStar
-													key={i}
-													className="w-4 h-4"
-												/>
-											) : (
-												<FaRegStar
-													key={i}
-													className="w-4 h-4"
-												/>
-											),
-										)}
+									<div className="justify-center">
+										<iframe
+											src={`https://www.youtube.com/embed/${testimonial.video_url}`}
+											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+											allowFullScreen
+											className="w-full h-full rounded-lg"
+										/>
 									</div>
-									<p className="text-gray-600 dark:text-gray-300 text-sm">
-										{testimonial.comment || 'Great course, highly recommended!'}
-									</p>
 								</div>
 							</div>
 						))}
@@ -122,7 +112,7 @@ export default function TestimonialCarousel({ testimonials, title }: { testimoni
 			</div>
 
 			{/* Dots indicator */}
-			{testimonials?.length > 1 && (
+			{data?.values?.length > 1 && (
 				<div className="flex justify-center mt-6 space-x-2">
 					{scrollSnaps.map((_, idx) => (
 						<button
@@ -139,3 +129,4 @@ export default function TestimonialCarousel({ testimonials, title }: { testimoni
 		</section>
 	)
 }
+

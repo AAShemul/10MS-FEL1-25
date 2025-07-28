@@ -1,67 +1,59 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import type { JSX } from 'react'
+import ProductCard from '@/components/productCard'
 import type { Product } from '@/types/interface'
+import type { JSX } from 'react'
 
 async function fetchProducts(): Promise<Product[] | null> {
-	try {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_URL}/api/v1/products`,
+	const extra: Product = {
+		title: 'IELTS Course by Munzereen Shahid',
+		id: '153',
+		slug: 'ielts-course',
+		order_idx: 0,
+		modality: 'recorded',
+		media: [
 			{
-				method: 'GET',
-				headers: {
-					accept: 'application/json',
-					'Content-Type': 'application/json',
-					'X-TENMS-SOURCE-PLATFORM': 'web',
-				},
+				name: 'preview_gallery',
+				resource_type: 'video',
+				resource_value: 'zrlYnaZftEQ',
+				thumbnail_url: 'https://cdn.10minuteschool.com/images/thumbnails/IELTS_new_16_9.png',
 			},
-		)
+			{
+				name: 'sqr_img',
+				resource_type: 'image',
+				resource_value: 'https://cdn.10minuteschool.com/images/thumbnails/IELTS_new_1_1.png',
+			},
+			{
+				name: 'thumbnail',
+				resource_type: 'image',
+				resource_value: 'https://cdn.10minuteschool.com/images/thumbnails/IELTS_new_16_9.png',
+			},
+		],
+		price_type: 'free',
+		is_enrolled: false,
+		price_details: {
+			min_price: 0,
+			min_final_price: 0,
+			max_price: 0,
+			max_final_price: 0,
+			text: "<span><font color='#1CAB55'><b>Free</b></span>",
+		},
+		instructor_text: '',
+		checklist: [],
+	}
+	try {
+		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/products`, {
+			method: 'GET',
+			headers: {
+				accept: 'application/json',
+				'Content-Type': 'application/json',
+				'X-TENMS-SOURCE-PLATFORM': 'web',
+			},
+		})
 		const data = (await response.json()).data.products
-		return data
+		return [extra, ...data]
 	} catch (error) {
 		console.error('Error fetching product:', error)
 		return null
 	}
-}
-
-export function ProductCard({
-	title,
-	slug,
-	media,
-	price_details,
-}: {
-	title: string
-	slug: string
-	media: {
-		name: string
-		resource_type: string
-		resource_value: string
-	}[]
-	price_details: {
-		min_price: number
-		min_final_price: number
-		max_price: number
-		max_final_price: number
-		text: string
-	}
-}) {
-	return (
-		<Link href={`/product/${slug}`}>
-			<div className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-				<Image
-					src={media?.[1]?.resource_value || 'https://dummyimage.com/500x500/000/fff.jpg&text=10+Minute+School'}
-					alt={title}
-					width={500}
-					height={500}
-					className="w-100 h-100 object-cover"
-				/>
-				<h2>{title}</h2>
-				<div>
-					<p>{price_details?.text}</p>
-				</div>
-			</div>
-		</Link>
-	)
 }
 
 /**
@@ -77,8 +69,8 @@ export default async function Page(): Promise<JSX.Element> {
 		return (
 			<div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
 				<div className="text-center">
-					<h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Product Not Found</h1>
-					<p className="text-gray-600 dark:text-gray-400">The requested product could not be loaded.</p>
+					<h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No Products</h1>
+					<p className="text-gray-600 dark:text-gray-400">Sorry, no products found.</p>
 				</div>
 			</div>
 		)
@@ -100,3 +92,4 @@ export default async function Page(): Promise<JSX.Element> {
 		</main>
 	)
 }
+

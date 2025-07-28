@@ -222,3 +222,13 @@ export interface Sitemap {
 	priority?: number
 	frequency?: 'weekly' | 'monthly' | 'yearly' | 'always' | 'hourly' | 'daily' | 'never'
 }
+
+export interface Menu {
+	title: string
+	path: string
+	submenu: boolean
+	submenuItems?: {
+		title: string
+		path: string
+	}[]
+}

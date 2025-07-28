@@ -1,10 +1,18 @@
+import About from '@/components/about'
 import Card from '@/components/card'
-import SectionComp from '@/components/section'
+import FAQ from '@/components/faq'
+import Features from '@/components/features'
+import Pointers from '@/components/pointers'
+import Testimonial from '@/components/testimonial'
 import type { Product, ProductData, Section } from '@/types/interface'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import type { JSX } from 'react'
 import { FaChevronRight } from 'react-icons/fa'
+import Instructor from '../../../../components/instructor'
+
+export const revalidate = 60 * 60 * 24
+export const dynamicParams = true
 
 async function fetchProduct(lang: string, slug: string): Promise<ProductData | null> {
 	try {
@@ -17,8 +25,6 @@ async function fetchProduct(lang: string, slug: string): Promise<ProductData | n
 			},
 		})
 		const data = (await response.json()).data
-		console.log('SEO Data:')
-		console.log(data.seo)
 		return data
 	} catch (error) {
 		console.error('Error fetching product:', error)
@@ -129,22 +135,43 @@ export default async function ProductPage({
 							className="prose dark:prose-invert max-w-none mt-4 text-gray-700 dark:text-gray-300"
 							dangerouslySetInnerHTML={{ __html: product.description }}
 						/>
+						<div className="block lg:hidden">
+							<Card
+								lang={lang}
+								product={product}
+							/>
+						</div>
 					</div>
 
-					{/* Dynamic Sections */}
-					{product.sections?.map((section: Section, id: number) => (
-						<SectionComp
-							key={id}
-							data={section}
-						/>
-					))}
+					{/* Instructor Sections */}
+					<Instructor
+						data={product.sections?.find((section: Section) => section.type === 'instructors') as Section}
+					/>
+
+					{/* Instructor Sections */}
+					<Testimonial
+						data={product.sections?.find((section: Section) => section.type === 'testimonials') as Section}
+					/>
 				</div>
-				<div className="lg:sticky lg:top-20">
+				<div className="hidden lg:block">
 					<Card
 						lang={lang}
 						product={product}
 					/>
 				</div>
+			</div>
+			<div className="lg:grid lg:grid-cols-2 lg:gap-8">
+				{/* Features Sections */}
+				<Features data={product.sections?.find((section: Section) => section.type === 'features') as Section} />
+
+				{/* Pointers Sections */}
+				<Pointers data={product.sections?.find((section: Section) => section.type === 'pointers') as Section} />
+
+				{/* About Sections */}
+				<About data={product.sections?.find((section: Section) => section.type === 'about') as Section} />
+
+				{/* FAQ Sections */}
+				<FAQ data={product.sections?.find((section: Section) => section.type === 'faq') as Section} />
 			</div>
 
 			{/* CTA Section */}
