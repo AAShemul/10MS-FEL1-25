@@ -17,7 +17,7 @@ export default function RenderMedia({ product }: { product: ProductData }): JSX.
 		} else if (product.media?.length > 0 && product.media[0].resource_type === 'video') {
 			setSelectedImage(product.media[0])
 		}
-	}, [])
+	}, [product])
 
 	if (!product.media?.length) return <></>
 

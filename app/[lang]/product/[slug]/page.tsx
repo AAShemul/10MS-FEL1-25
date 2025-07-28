@@ -11,7 +11,6 @@ import type { JSX } from 'react'
 import { FaChevronRight } from 'react-icons/fa'
 import Instructor from '../../../../components/instructor'
 
-export const revalidate = 60 * 60 * 24
 export const dynamicParams = true
 
 async function fetchProduct(lang: string, slug: string): Promise<ProductData | null> {

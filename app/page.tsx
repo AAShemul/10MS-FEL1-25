@@ -78,7 +78,7 @@ export default async function Page(): Promise<JSX.Element> {
 
 	return (
 		<main className="my-20 p-10">
-			<div className="lg:grid lg:grid-cols-4 gap-8">
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 				{products.map((product: Product) => (
 					<ProductCard
 						key={product.slug}
