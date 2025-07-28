@@ -1,7 +1,7 @@
 import type { JSX } from 'react'
 import { Pointer, Section } from '@/types/interface'
 
-export default function Pointers({ data }: { data: Section }) {
+export default function PointersComp({ data }: { data: Section }): JSX.Element {
   return (
     <section className="mb-12">
       <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">{data.name}</h2>

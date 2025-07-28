@@ -2,7 +2,7 @@ import type { JSX } from 'react'
 import { Section, FAQ } from '@/types/interface'
 import Accordions from '@/components/accordions'
 
-export default function FAQ({ data }: { data: Section }): JSX.Element {
+export default function FAQComp({ data }: { data: Section }): JSX.Element {
 	return (
 		<section
 					key={data.name}

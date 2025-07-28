@@ -2,7 +2,7 @@ import type { JSX } from 'react'
 import { Instructor, Section } from '@/types/interface'
 import Image from 'next/image'
 
-export default function Instructor({ data }: { data: Section }): JSX.Element {
+export default function InstructorComp({ data }: { data: Section }): JSX.Element {
 	return (
 		<section
 			key={data.name}
