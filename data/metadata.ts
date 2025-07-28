@@ -14,20 +14,16 @@ export const metadata: Metadata = {
 	},
 	description: config.seo.description,
 	keywords: config.seo.keywords,
-	generator: 'S Technologies',
-	applicationName: 'STech UI',
+	generator: 'Md. Ashraful Alam Shemul',
+	applicationName: '10 Minute School',
 	authors: [
 		{
 			name: 'Md. Ashraful Alam Shemul',
 			url: 'https://github.com/AAShemul',
 		},
-		{
-			name: 'S Technologies',
-			url: 'https://www.stechbd.net',
-		},
 	],
 	creator: 'Md. Ashraful Alam Shemul',
-	publisher: 'S Technologies',
+	publisher: 'Md. Ashraful Alam Shemul',
 	robots: 'index, follow',
 	category: 'Technology',
 	metadataBase: new URL(config.info.site),
@@ -58,8 +54,8 @@ export const metadata: Metadata = {
 	},
 	twitter: {
 		card: 'summary_large_image',
-		site: '@STechBD_Net',
-		creator: '@STechBD_Net',
+		site: '@10Minuteschool',
+		creator: '@10Minuteschool',
 		title: {
 			default: `Welcome to ${config.seo.title}`,
 			template: `%s | ${config.seo.title}`,

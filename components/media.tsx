@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import type { ProductData, Media } from '@/types/interface'
 import { FaPlay } from 'react-icons/fa'
+import MediaThumbnails from '@/components/slider'
 
 export default function RenderMedia({ product }: { product: ProductData }): JSX.Element {
 	const [selectedImage, setSelectedImage] = useState<Media | null>(null)
@@ -75,30 +76,11 @@ export default function RenderMedia({ product }: { product: ProductData }): JSX.
 			</div>
 
 			{product.media.length > 1 && (
-				<div className="flex space-x-2 overflow-x-auto py-2">
-					{product.media.map((media, index) => (
-						<button
-							key={index}
-							onClick={event => {
-								event.preventDefault()
-								setSelectedImage(media)
-							}}
-							className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 cursor-pointer ${
-								media === selectedImage
-									? 'border-primary-600 dark:border-primary-400'
-									: 'border-transparent'
-							}`}
-						>
-							<Image
-								src={media.resource_type === 'image' ? media.resource_value : media.thumbnail_url || ''}
-								alt={`Thumbnail ${index + 1}`}
-								width={64}
-								height={64}
-								className="w-full h-full object-cover"
-							/>
-						</button>
-					))}
-				</div>
+				<MediaThumbnails 
+					media={product.media}
+					selectedImage={selectedImage}
+					onSelect={setSelectedImage}
+				/>
 			)}
 		</div>
 	)

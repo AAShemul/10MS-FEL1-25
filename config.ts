@@ -1,6 +1,6 @@
 const config = {
 	info: {
-		site: 'https://10minuteschool.com',
+		site: 'https://10ms-fel1-25.vercel.app',
 		title: '10 Minute School',
 	},
 	seo: {

@@ -1,8 +1,8 @@
-import Checklist from '@/components/checklist'
-import RenderMedia from '@/components/renderMedia'
+import Card from '@/components/card'
 import SectionComp from '@/components/section'
 import type { Product, ProductData, Section } from '@/types/interface'
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import type { JSX } from 'react'
 import { FaChevronRight } from 'react-icons/fa'
 
@@ -17,7 +17,8 @@ async function fetchProduct(lang: string, slug: string): Promise<ProductData | n
 			},
 		})
 		const data = (await response.json()).data
-		console.log(data)
+		console.log('SEO Data:')
+		console.log(data.seo)
 		return data
 	} catch (error) {
 		console.error('Error fetching product:', error)
@@ -25,13 +26,45 @@ async function fetchProduct(lang: string, slug: string): Promise<ProductData | n
 	}
 }
 
-export async function generateMetadata({ params }: { params: { lang: string; slug: string } }): Promise<Metadata> {
-	const { lang, slug } = params
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ lang: string; slug: string }>
+}): Promise<Metadata> {
+	const { lang, slug } = await params
 	const product: ProductData | null = await fetchProduct(lang, slug)
 
 	return {
-		title: product?.title,
-		description: product?.description,
+		title: product?.seo?.title,
+		description: product?.seo?.description,
+		keywords: product?.seo?.keywords,
+		openGraph: {
+			locale: lang === 'en' ? 'en_US' : 'bn_BD',
+			url: `${process.env.NEXT_PUBLIC_API_URL}/${lang}/product/${slug}`,
+			title: product?.title,
+			description: product?.description,
+			images: [
+				{
+					url: product?.media?.[0]?.resource_value || '',
+					width: 1200,
+					height: 628,
+					alt: product?.title,
+				},
+			],
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title: product?.title,
+			description: product?.description,
+			images: [
+				{
+					url: product?.media?.[0]?.resource_value || '',
+					width: 1200,
+					height: 628,
+					alt: product?.title,
+				},
+			],
+		},
 	}
 }
 
@@ -48,24 +81,22 @@ export async function generateStaticParams() {
 	return data.products.map((product: Product) => ({ slug: product.slug }))
 }
 
+/**
+ * Product page component for 10 Minute School.
+ *
+ * @param { Promise<{ lang: string, slug: string }> } params The parameters for the product page.
+ * @returns { JSX.Element } The Page component.
+ * @since 1.0.0
+ */
 export default async function ProductPage({
 	params,
 }: {
-	params: { lang: string; slug: string }
+	params: Promise<{ lang: string; slug: string }>
 }): Promise<JSX.Element> {
-	const { lang, slug } = params
+	const { lang, slug } = await params
 	const product: ProductData | null = await fetchProduct(lang, slug)
 
-	if (!product) {
-		return (
-			<div className="min-h-screen my-20 flex items-center justify-center bg-white dark:bg-gray-900">
-				<div className="text-center">
-					<h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Product Not Found</h1>
-					<p className="text-gray-600 dark:text-gray-400">The requested product could not be loaded.</p>
-				</div>
-			</div>
-		)
-	}
+	if (!product) notFound()
 
 	return (
 		<main className="max-w-7xl min-h-screen mx-auto my-20 px-4 py-8">
@@ -108,38 +139,31 @@ export default async function ProductPage({
 						/>
 					))}
 				</div>
-				<div>
-					{/* Media Gallery */}
-					<RenderMedia product={product} />
-
-					{/* Checklist */}
-					{product?.checklist?.length > 0 && (
-						<div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-							{product.checklist.map((item, index) => (
-								<Checklist
-									key={index}
-									item={item}
-								/>
-							))}
-						</div>
-					)}
+				<div className="lg:sticky lg:top-20">
+					<Card
+						lang={lang}
+						product={product}
+					/>
 				</div>
 			</div>
+
 			{/* CTA Section */}
 			<section className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg border-t border-gray-200 dark:border-gray-700">
-				<div className="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+				<div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
 					<div className="mb-4 md:mb-0">
-						<p className="text-gray-500 dark:text-gray-400 text-sm">Total Enrolled</p>
+						<p className="text-gray-500 dark:text-gray-400 text-sm">
+							{lang === 'en' ? 'Total Enrolled' : 'মোট এনরোল করা হয়েছে'}
+						</p>
 						<p className="text-lg font-semibold text-gray-900 dark:text-white">
-							{product.checklist?.find(item => item.text.includes('Enrolled'))?.text || 'Join Now'}
+							{lang === 'en'
+								? product.checklist?.find(item => item.text.includes('Enrolled'))?.text || 'Enrolled'
+								: product.checklist?.find(item => item.text.includes('কোর্সটি করছেন'))?.text ||
+								  'এনরোল করুন'}
 						</p>
 					</div>
 					<div className="flex space-x-4">
-						<button className="px-6 py-3 border border-primary-600 text-primary-600 dark:border-primary-400 dark:text-primary-400 font-medium rounded-lg hover:bg-primary-50 dark:hover:bg-gray-700 transition-colors">
-							Add to Cart
-						</button>
-						<button className="px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors">
-							Enroll Now
+						<button className="px-6 py-3 bg-green-700 text-white font-bold rounded-lg hover:bg-green-800 transition-colors">
+							{lang === 'en' ? 'Enroll Now' : 'এনরোল করুন'}
 						</button>
 					</div>
 				</div>
@@ -147,3 +171,4 @@ export default async function ProductPage({
 		</main>
 	)
 }
+

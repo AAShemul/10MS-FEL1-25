@@ -3,118 +3,6 @@ import Link from 'next/link'
 import type { JSX } from 'react'
 import type { Product } from '@/types/interface'
 
-const products: Product[] = [
-	{
-		title: "Kids' English",
-		id: '10740',
-		slug: 'kids-english-programme',
-		order_idx: 0,
-		modality: 'recorded',
-		media: [
-			{
-				name: 'thumbnail',
-				resource_type: 'image',
-				resource_value: 'https://cdn.10minuteschool.com/images/thumbnails/kids-english-course-thumbnail.png',
-			},
-			{
-				name: 'sqr_img',
-				resource_type: 'image',
-				resource_value: 'https://cdn.10minuteschool.com/images/thumbnails/kids-english-sqr-thumbnail-new.png',
-			},
-			{
-				name: 'preview_gallery',
-				resource_type: 'image',
-				resource_value: 'https://cdn.10minuteschool.com/images/thumbnails/kids-english-course-thumbnail.png',
-			},
-		],
-		price_type: 'free',
-		is_enrolled: false,
-		price_details: {
-			min_price: 0,
-			min_final_price: 0,
-			max_price: 0,
-			max_final_price: 0,
-			text: 'Call for Booking',
-		},
-		instructor_text: '',
-		checklist: [],
-	},
-	{
-		title: '[Paid] HSC 26 অনলাইন ব্যাচ (বাংলা, ইংরেজি, তথ্য ও যোগাযোগ প্রযুক্তি) - Lecture Sheet',
-		id: '10708',
-		slug: 'hsc-26-online-batch-bangla-english-ict-lecture-sheet',
-		order_idx: 0,
-		modality: 'book',
-		media: null,
-		price_type: 'paid',
-		is_enrolled: false,
-		price_details: {
-			min_price: 1500,
-			min_final_price: 1500,
-			max_price: 1500,
-			max_final_price: 1500,
-			text: '৳ 1500',
-		},
-		instructor_text: '',
-		checklist: [],
-	},
-	{
-		title: '[Paid] HSC 26 অনলাইন ব্যাচ (ফিজিক্স, কেমিস্ট্রি, ম্যাথ, বায়োলজি) - Lecture Sheet',
-		id: '10707',
-		slug: 'hsc-2026-online-batch-lecture-sheet',
-		order_idx: 0,
-		modality: 'book',
-		media: null,
-		price_type: 'paid',
-		is_enrolled: false,
-		price_details: {
-			min_price: 4800,
-			min_final_price: 4800,
-			max_price: 4800,
-			max_final_price: 4800,
-			text: '৳ 4800',
-		},
-		instructor_text: '',
-		checklist: [],
-	},
-	{
-		title: 'Spoken English Junior Practice Resource (Advance)',
-		id: '10674',
-		slug: 'spoken-english-junior-online-resource-advance',
-		order_idx: 0,
-		modality: 'recorded',
-		media: [
-			{
-				name: 'thumbnail',
-				resource_type: 'image',
-				resource_value: 'https://cdn.10minuteschool.com/images/thumbnails/spoken-english-junior-thumbnail.png',
-			},
-			{
-				name: 'sqr_img',
-				resource_type: 'image',
-				resource_value:
-					'https://cdn.10minuteschool.com/images/thumbnails/spoken-english-junior-sqr-thumbnail.png',
-			},
-			{
-				name: 'preview_gallery',
-				resource_type: 'image',
-				resource_value: 'https://cdn.10minuteschool.com/images/thumbnails/spoken-english-junior-thumbnail.png',
-			},
-		],
-		price_type: 'free',
-		is_enrolled: false,
-		price_details: {
-			min_price: 0,
-			min_final_price: 0,
-			max_price: 0,
-			max_final_price: 0,
-			text: "<span><font color='#1CAB55'><b>Free</b></span>",
-		},
-		instructor_text: '',
-		checklist: [],
-	},
-]
-
 async function fetchProducts(): Promise<Product[] | null> {
 	try {
 		const response = await fetch(
@@ -129,7 +17,6 @@ async function fetchProducts(): Promise<Product[] | null> {
 			},
 		)
 		const data = (await response.json()).data.products
-		console.log(data)
 		return data
 	} catch (error) {
 		console.error('Error fetching product:', error)
@@ -177,6 +64,12 @@ export function ProductCard({
 	)
 }
 
+/**
+ * Homepage component for 10 Minute School.
+ *
+ * @returns { JSX.Element } The Page component.
+ * @since 1.0.0
+ */
 export default async function Page(): Promise<JSX.Element> {
 	const products: Product[] | null = await fetchProducts()
 
